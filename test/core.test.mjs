@@ -1,0 +1,8 @@
+// Purpose: Verify parsing, splitting, retrieval, question separation, matrix, impact and check.
+import test from'node:test';import assert from'node:assert/strict';import{parseMarkdown,parseCsv,splitArtifact,retrieve,questions,matrix,impact,check,htmlReport}from'../src/index.mjs';
+test('clauses parse markdown nested and csv',()=>{assert.deepEqual(parseMarkdown('# 1 Login\n- Must reject bad keys').map(x=>x.id),['1','1.2']);assert.equal(parseCsv('clause_id,text\nR1,Encrypt data')[0].id,'R1')});
+test('artifact split modes',()=>{assert.ok(splitArtifact('a.js','function a(){} function b(){}').length>=1);assert.equal(splitArtifact('a.py','def a():\n pass\ndef b():\n pass').length,2);assert.equal(splitArtifact('a.txt','one\n\ntwo').length,2)});
+test('retrieval plants artifact',()=>{const c=parseCsv('clause_id,text\nR1,encrypt records')[0],a=[...splitArtifact('noise.txt','paint wall'),...splitArtifact('crypto.js','function encryptRecords(){}')];assert.match(retrieve(c,a,1)[0].path,/crypto/)});
+test('implement and verify distinct',()=>{const q=questions({kind:'test'});assert.equal(q.length,2);assert.notEqual(q[0].statement,q[1].statement)});
+test('matrix uncovered orphan and impact',()=>{const c=parseCsv('clause_id,text\nA,a\nB,b'),a=splitArtifact('x.txt','a\n\nb'),m=matrix(c,a,[{clauseId:'A',artifactId:a[0].id,probability:.9}]);assert.equal(m.coverage,.5);assert.deepEqual(m.uncovered,['B']);assert.equal(m.orphans.length,1);assert.equal(impact(m,{clauses:[{id:'A'}]}).length,1)});
+test('check and html',()=>{const p={coverage:1,cells:[{clauseId:'A',artifactId:'x',probability:.9}]},c={coverage:0,cells:[]};assert.equal(check(p,c).ok,false);assert.doesNotMatch(htmlReport(c),/http/)});

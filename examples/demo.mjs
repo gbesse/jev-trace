@@ -1,0 +1,2 @@
+// Purpose: Build a synthetic trace matrix offline.
+import{parseMarkdown,splitArtifact,retrieve,matrix}from'../src/index.mjs';const clauses=parseMarkdown('# 1 Authentication\n- Reject invalid tokens'),artifacts=splitArtifact('auth.test.js','test rejects invalid token');const matches=clauses.flatMap(c=>retrieve(c,artifacts,1).map(a=>({clauseId:c.id,artifactId:a.id,probability:.9})));console.log(matrix(clauses,artifacts,matches));
