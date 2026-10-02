@@ -19,6 +19,10 @@ Identifiers, configured path hints and token overlap retrieve bounded candidates
 ## Boundaries
 An accepted relation is retrieval/judgment assistance—not proof of correct implementation. A person signs the matrix. Splitting is deliberately language-agnostic and partial. CSV writing, CLI/git invocation and live provider remain unwired in this alpha. No benchmark is claimed.
 
+## Shareable demo report
+
+Run `npm run demo:report` to capture this repository’s bundled example as one JSON object with the project purpose, version and complete demo output. The command fails if the demo fails, so the report is useful when sharing a reproducible first look or reporting unexpected behavior. The bundled demo’s data and safety boundaries still apply.
+
 ## Validation
 Run `npm run check && npm run typecheck && npm test && npm run demo`; CI uses Node 22 and 24.
 
